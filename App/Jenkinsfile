@@ -1,70 +1,13 @@
-// pipeline {
-//   agent any
-
-//   tools {
-//     maven 'Maven3' 
-//   }
-
-//   environment {
-//     DOCKER_IMAGE = "gglaros/app"
-//     TAG = "latest"
-//   }
-
-//   stages {
-//     stage('Checkout') {
-//       steps {
-//         checkout scm
-//       }
-//     }
-
-//     stage('Build App') {
-//       steps {
-//         dir('App') {
-//           sh 'mvn clean package -DskipTests'
-//         }
-//       }
-//     }
-
-//     stage('Build Docker Image') {
-//       steps {
-//         sh "docker build -f App/test.dockerfile -t $DOCKER_IMAGE:$TAG App"
-//       }
-//     }
-
-//     stage('Push to Docker Hub') {
-//       steps {
-//         withCredentials([usernamePassword(
-//           credentialsId: 'dockerhub-creds',
-//           usernameVariable: 'DOCKER_USER',
-//           passwordVariable: 'DOCKER_PASS'
-//         )]) {
-//           sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-//           sh "docker push $DOCKER_IMAGE:$TAG"
-//         }
-//       }
-//     }
-
-//     stage('Deploy to Kubernetes') {
-//       steps {
-//         withCredentials([file(
-//           credentialsId: 'kubeconfig',
-//           variable: 'KUBECONFIG'
-//         )]) {
-//           sh 'kubectl apply -f kubernetes/'
-//         }
-//       }
-//     }
-//   }
-// }
-
-
-
 pipeline {
   agent any
 
+  tools {
+    maven 'Maven3' 
+  }
+
   environment {
     DOCKER_IMAGE = "gglaros/app"
-    TAG          = "latest"
+    TAG = "latest"
   }
 
   stages {
@@ -77,33 +20,18 @@ pipeline {
     stage('Build App') {
       steps {
         dir('App') {
-          docker.image('maven:3.9.6-eclipse-temurin-21').inside {
-            sh 'mvn clean package -DskipTests'
-          }
+          sh 'mvn clean package -DskipTests'
         }
       }
     }
 
     stage('Build Docker Image') {
-      agent {
-        docker {
-          image 'docker:24.0-dind'             // Docker-in-Docker image
-          args  '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-      }
       steps {
-        // Εδώ ο agent είναι το DinD container, με πρόσβαση στο host Docker
         sh "docker build -f App/test.dockerfile -t $DOCKER_IMAGE:$TAG App"
       }
     }
 
     stage('Push to Docker Hub') {
-      agent {
-        docker {
-          image 'docker:24.0'                  // Docker CLI μόνο
-          args  '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-      }
       steps {
         withCredentials([usernamePassword(
           credentialsId: 'dockerhub-creds',
@@ -128,3 +56,4 @@ pipeline {
     }
   }
 }
+
