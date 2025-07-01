@@ -54,15 +54,4 @@ pipeline {
 tools {
   maven 'Maven3' // το όνομα που έδωσες παραπάνω
 }
-  post {
-    always {
-      cleanWs()
-    }
-    success {
-      echo 'Build completed successfully!'
-    }
-    failure {
-      echo 'Build failed!'
-    }
-  }
-}
+ 
