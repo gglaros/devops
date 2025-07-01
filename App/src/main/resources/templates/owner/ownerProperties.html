@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Properties</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <!-- Έλεγχος αν η λίστα properties δεν είναι άδεια -->
+    <div th:if="${not #lists.isEmpty(ownerProperties)}">
+        <table class="table">
+            <thead>
+            <h1>Properties</h1>
+            <tr>
+                <th>City</th>
+                <th>Description</th>
+                <th>Address</th>
+                <th>Rent Price</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through properties -->
+            <tr th:each="property : ${ownerProperties}">
+                <td th:text="${property.city}">City</td>
+                <td th:text="${property.description}">Description</td>
+                <td th:text="${property.address}">Address</td>
+                <td th:text="${property.rentPrice}">Rent Price</td>
+                <td th:text="${property.status !=null ? property.status : 'not maked application'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Αν η λίστα properties είναι άδεια -->
+    <div th:if="${#lists.isEmpty(ownerProperties)}">
+        You do not have any properties registered yet!
+    </div>
+        <a sec:authorize="hasRole('OWNER')" class="btn btn-primary"
+         th:href="@{'/owner/make/property/' + ${owner.id}  }">Register property</a>
+
+</div>
+</body>
+</html>

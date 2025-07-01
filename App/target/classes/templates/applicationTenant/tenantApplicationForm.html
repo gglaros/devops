@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>Make Application</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <h1>Available properties</h1>
+    <form th:action="@{/tenantApplications/search}" method="get">
+        <input type="number" name="maxPrice" placeholder="Enter max price (€)" min="0" required />
+        <button type="submit">Search</button>
+    </form>
+
+
+    <div th:if="${not #lists.isEmpty(properties)}">
+        <form th:action="@{/tenantApplications/submit}" method="post" onsubmit="hideButton()" th:object="${tenantApplication}">
+            <input type="hidden" th:field="*{tenant}" />
+             <table class="table">
+                <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Price (€)</th>
+                    <th>Description</th>
+                    <th>Owner</th>
+                    <th>Visit</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="property : ${properties}">
+                    <td class="table-element" title="City" th:text="${property.getCity()}"></td>
+                    <td class="table-element" title="Address" th:text="${property.getAddress()}"></td>
+                    <td class="table-element" title="Price" th:text="${property.rentPrice}"></td>
+                    <td class="table-element" title="Description" th:text="${property.getDescription()}"></td>
+                    <td class="table-element" title="Owner" th:text="${property.getOwner() != null ? property.getOwner().firstName : 'N/A'}"></td>
+                    <td><input type="checkbox" name="visitChecked" value="true" /></td>
+                    <td>
+                        <button class="btn btn-primary" type="submit" name="propertyId" id="submitButton" th:value="${property.getId()}">Send request</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </form>
+        <script>
+            function hideButton() {
+                const button = document.getElementById("submitButton");
+                button.style.display = "none"; // Αποκρύπτει το κουμπί
+            }
+        </script>
+    </div>
+    <div th:if="${#lists.isEmpty(properties)}">
+        There are no available properties on eye, please try again later
+    </div>
+</div>
+</body>
+</html>

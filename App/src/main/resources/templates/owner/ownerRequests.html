@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rental requests</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <!-- Έλεγχος αν η λίστα properties δεν είναι άδεια -->
+    <div th:if="${not #lists.isEmpty(ownerRequests)}">
+        <table class="table">
+            <thead>
+            <h1>Received rental requests</h1>
+            <tr>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Address</th>
+                <th>Visit request</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through properties -->
+            <tr th:each="request : ${ownerRequests}">
+                <td th:text="${request.tenant.firstName}">City</td>
+                <td th:text="${request.tenant.lastName}">Description</td>
+                <td th:text="${request.tenant.email}">Address</td>
+                <td th:text="${request.tenant.phone}">Rent Price</td>
+                <td th:text="${request.getProperty().city !=null ? request.getProperty().city : 'not maked application'}"></td>
+                <td th:text="${request.getProperty().address !=null ? request.getProperty().address : 'not maked application'}"></td>
+                <td th:text="${request.getVisit()}"></td>
+                                <td>
+                                    <a sec:authorize="hasRole('OWNER')" class="btn btn-primary"
+                                       th:href="@{'/tenantApplications/change/appStatus/' + ${request.id}}"> Change status </a>
+                                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Αν η λίστα properties είναι άδεια -->
+    <div th:if="${#lists.isEmpty(ownerRequests)}">
+        You do not have any rental requests yet!
+    </div>
+</div>
+</body>
+</html>

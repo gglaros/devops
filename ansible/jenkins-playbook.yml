@@ -1,0 +1,7 @@
+- name: Install Jenkins on VM
+  hosts: jenkins_vm
+  become: true
+
+  roles:
+    - jenkins
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Applications</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <div th:if="${not#lists.isEmpty(tenantApplications)}">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Tenant Email</th>
+                <th>Property City</th>
+                <th>Property Address</th>
+                <th>Property RentPrice</th>
+                <th>Owner's Email</th>
+                <th>Visit request</th>
+                <th>App Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="Tenantapp: ${tenantApplications}">
+                <td th:text="${Tenantapp.property !=null ? Tenantapp.getTenant().email : 'NO'}"></td>
+                <td th:text="${Tenantapp.property !=null ? Tenantapp.getProperty().getCity() : 'NO'}"></td>
+                <td th:text="${Tenantapp.property !=null ? Tenantapp.getProperty().getAddress() : 'NO'}"></td>
+                <td th:text="${Tenantapp.property!=null ? Tenantapp.getProperty().getRentPrice() : 'NO'}"></td>
+                <td th:text="${Tenantapp.property !=null ? Tenantapp.getProperty().getOwner().getEmail() : 'NO'}"></td>
+                <td th:text="${Tenantapp.getVisit()}"></td>
+                <td th:text="${Tenantapp.getStatus() !=null ? Tenantapp.getStatus() : 'waiting'}"></td>
+
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${ #lists.isEmpty(tenantApplications)}">
+        Seems like no rental requests have been submitted yet :/
+    </div>
+
+</div>
+</body>
+</html>
+

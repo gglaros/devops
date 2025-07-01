@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{page_layout/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Tenants</title>
+</head>
+<body>
+<div layout:fragment="main-content">
+    <div th:if="${not#lists.isEmpty(tenants)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="tenant : ${tenants}">
+                <td th:text="${tenant.firstName}"></td>
+                <td th:text="${tenant.lastName}"></td>
+                <td th:text="${tenant.email}"></td>
+<!--                <div th:if="${tetant.status == }" KSEKINISA NA FTIAXNO TA CHANGE STATUS KOUMPIA-->
+<!--                    <a class="button" th:href="@{'/tenant/MyApplications/' + ${tenant.id}}">My Apps </a>-->
+<!--                </td>-->
+                <td th:text="${tenant.validation}"></td>
+<!--                <td th:text="${tenant.validation !=null ? tenant.validation : 'not yet validated'}"></td>-->
+<!--                <div th:if="${tenant.validation == null}">-->
+<!--                    <td>-->
+                <td> <a class="btn btn-primary" th:href="@{/tenant/change/valStatus/{tenantId}(tenantId=${tenant.id})}">Proccess validation status</a></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ #lists.isEmpty(tenants)}">
+        No tenants found!
+    </div>
+</div>
+</body>
+</html>
