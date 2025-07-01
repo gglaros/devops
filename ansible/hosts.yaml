@@ -1,0 +1,6 @@
+---
+azure-hosts:
+  hosts:
+    devops-vm-1:
+      ansible_host: az-devops
+  

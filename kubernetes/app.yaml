@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: your-dockerhub-user/app:latest
+          image: gglaros/app:latest
           ports:
             - containerPort: 8080
           env:

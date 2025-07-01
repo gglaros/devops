@@ -1,0 +1,6 @@
+- name: Deploy application stack to VM with docker-compose
+  hosts: all
+  become: true
+  roles:
+    - docker
+    - app-stack

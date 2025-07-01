@@ -1,10 +1,11 @@
-- name: Update apt cache
-  apt:
-    update_cache: yes
 
-- name: Install Java 17
+# - name: Update apt cache
+#   apt:
+#     update_cache: yes
+
+- name: Install Java 21
   apt:
-    name: openjdk-17-jdk
+    name: openjdk-21-jdk
     state: present
 
 - name: Add Jenkins key
@@ -35,3 +36,28 @@
     port: '8080'
     proto: tcp
 
+# ------------------------------
+# Εγκατάσταση Docker
+# ------------------------------
+
+- name: Install Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Add Jenkins user to Docker group
+  user:
+    name: jenkins
+    groups: docker
+    append: yes
+
+- name: Enable and start Docker service
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Restart Jenkins to apply Docker group changes
+  systemd:
+    name: jenkins
+    state: restarted
