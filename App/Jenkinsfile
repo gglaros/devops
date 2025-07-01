@@ -6,6 +6,12 @@ pipeline {
     TAG = "latest"
   }
 
+tools {
+    maven 'Maven3'  // Το όνομα που έδωσες παραπάνω
+  }
+
+
+
   stages {
     stage('Checkout') {
       steps {
@@ -51,7 +57,3 @@ pipeline {
   }
 }
 
-tools {
-  maven 'Maven3' // το όνομα που έδωσες παραπάνω
-}
- 
