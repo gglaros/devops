@@ -1,16 +1,14 @@
 pipeline {
   agent any
 
+  tools {
+    maven 'Maven3' 
+  }
+
   environment {
     DOCKER_IMAGE = "gglaros/app"
     TAG = "latest"
   }
-
-tools {
-    maven 'Maven3'  // Το όνομα που έδωσες παραπάνω
-  }
-
-
 
   stages {
     stage('Checkout') {
@@ -21,13 +19,15 @@ tools {
 
     stage('Build App') {
       steps {
-        sh 'mvn clean package -DskipTests'
+        dir('App') {
+          sh 'mvn clean package -DskipTests'
+        }
       }
     }
 
     stage('Build Docker Image') {
       steps {
-        sh "docker build -f test.dockerfile -t $DOCKER_IMAGE:$TAG ."
+        sh "docker build -f App/test.dockerfile -t $DOCKER_IMAGE:$TAG App"
       }
     }
 
@@ -56,4 +56,3 @@ tools {
     }
   }
 }
-
