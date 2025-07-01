@@ -4,7 +4,6 @@ pipeline {
   environment {
     DOCKER_IMAGE = "gglaros/app"
     TAG = "latest"
-    // αφαιρούμε το KUBECONFIG από εδώ
   }
 
   stages {
@@ -41,7 +40,6 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        // εδώ φορτώνουμε το kubeconfig ως file και θέτουμε τη μεταβλητή περιβάλλοντος
         withCredentials([file(
           credentialsId: 'kubeconfig',
           variable: 'KUBECONFIG'
